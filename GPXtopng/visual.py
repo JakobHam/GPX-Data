@@ -6,7 +6,7 @@ from folium import plugins
 def plot_gpx_folder(folder_path, map_filename="map.html"):
     bounds = [[54, 18], [58, 1]]
     m = folium.Map(location=[56, 10], zoom_start=7, max_bounds=True, min_lat=bounds[0][0], max_lat=bounds[1][0], min_lon=bounds[0][1], max_lon=bounds[1][1])
-    marker_cluster = plugins.MarkerCluster().add_to(m)
+    
     total_points = 0
     total_lat = 0
     total_lon = 0
@@ -14,7 +14,7 @@ def plot_gpx_folder(folder_path, map_filename="map.html"):
     for filename in os.listdir(folder_path):
         if filename.endswith('.gpx'):
             gpx_file_path = os.path.join(folder_path, filename)
-            marker_cluster, total_lat, total_lon, total_points = plot_gpx_file(gpx_file_path, m, marker_cluster, total_lat, total_lon, total_points)
+            total_lat, total_lon, total_points = plot_gpx_file(gpx_file_path, m, total_lat, total_lon, total_points)
 
     if total_points > 0:
         average_lat = total_lat / total_points
@@ -27,7 +27,7 @@ def plot_gpx_folder(folder_path, map_filename="map.html"):
     else:
         print("No valid coordinates found in GPX files.")
 
-def plot_gpx_file(gpx_file_path, map_obj, marker_cluster, total_lat, total_lon, total_points):
+def plot_gpx_file(gpx_file_path, map_obj, total_lat, total_lon, total_points):
     with open(gpx_file_path, 'r') as gpx_file:
         gpx = gpxpy.parse(gpx_file)
         for track in gpx.tracks:
@@ -37,15 +37,13 @@ def plot_gpx_file(gpx_file_path, map_obj, marker_cluster, total_lat, total_lon, 
                 total_lat += sum(lats)
                 total_lon += sum(lons)
                 total_points += len(lats)
-                marker_cluster = plot_points_on_map(lats, lons, map_obj, marker_cluster)
+                plot_points_on_map(lats, lons, map_obj)
 
-    return marker_cluster, total_lat, total_lon, total_points
+    return total_lat, total_lon, total_points
 
-def plot_points_on_map(lats, lons, map_obj, marker_cluster):
+def plot_points_on_map(lats, lons, map_obj):
     for lat, lon in zip(lats, lons):
-        folium.Marker(location=[lat, lon]).add_to(marker_cluster)
-
-    return marker_cluster
+        folium.CircleMarker(location=[lat, lon], radius=3, color='blue').add_to(map_obj)
 
 if __name__ == "__main__":
     folder_path = "/Users/jakobsmac/Public/python_script/source"
