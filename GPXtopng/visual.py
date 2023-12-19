@@ -4,6 +4,7 @@ import folium
 from folium import plugins
 
 def plot_gpx_folder(folder_path, map_filename="map.html"):
+    bound = [[54, 88], [58, 15]]
     m = folium.Map(location=[0, 0], zoom_start=10)  # Initialize the map
     total_points = 0
     total_lat = 0
