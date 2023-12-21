@@ -39,16 +39,16 @@ def plot_gpx_file(gpx_file_path, map_obj, total_lat, total_lon, total_points):
                 total_points += len(lats)
                 plot_points_on_map(lats, lons, map_obj)
 
-                # Add PolyLine to represent the path
-                path_color = 'red'
-                folium.PolyLine(locations=list(zip(lats, lons)), color=path_color, weight=2.5, opacity=1, fill=False).add_to(map_obj)
+                # Add PolyLine to represent the path with a dark red color
+                path_color = '#8B0000'  # Dark red hex color
+                folium.PolyLine(locations=list(zip(lats, lons)), color=path_color, weight=1, opacity=1, fill=False).add_to(map_obj)
 
     return total_lat, total_lon, total_points
 
 def plot_points_on_map(lats, lons, map_obj):
     for lat, lon in zip(lats, lons):
-        # Use a smaller radius for thinner markers
-        folium.CircleMarker(location=[lat, lon], radius=1, color='red', fill_opacity=0).add_to(map_obj)
+        # Use dark red color for both the outline and fill of the markers
+        folium.CircleMarker(location=[lat, lon], radius=1, color='#8B0000', fill_color='#8B0000', fill_opacity=1).add_to(map_obj)
 
 if __name__ == "__main__":
     folder_path = "/Users/jakobsmac/Public/python_script/source"
