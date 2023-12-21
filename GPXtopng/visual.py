@@ -5,8 +5,8 @@ from folium import plugins
 
 def plot_gpx_folder(folder_path, map_filename="map.html"):
     bounds = [[54, 18], [58, 1]]
-    m = folium.Map(location=[56, 10], zoom_start=7, max_bounds=True, min_lat=bounds[0][0], max_lat=bounds[1][0], min_lon=bounds[0][1], max_lon=bounds[1][1])
-    
+    m = folium.Map(location=[56, 10], zoom_start=7, max_bounds=True, min_lat=bounds[0][0], max_lat=bounds[1][0], min_lon=bounds[0][1], max_lon=bounds[1][1], tiles='CartoDB Positron')
+
     total_points = 0
     total_lat = 0
     total_lon = 0
@@ -19,8 +19,8 @@ def plot_gpx_folder(folder_path, map_filename="map.html"):
     if total_points > 0:
         average_lat = total_lat / total_points
         average_lon = total_lon / total_points
-        m.location = [average_lat, average_lon]  # Set the new center for the map
-        m.zoom_start = 12  # Set the new zoom level
+        m.location = [average_lat, average_lon]  # Set new center of map
+        m.zoom_start = 12  # Set new zoom level
 
         m.save(map_filename)
         print(f"Map saved as {map_filename}")
@@ -38,6 +38,10 @@ def plot_gpx_file(gpx_file_path, map_obj, total_lat, total_lon, total_points):
                 total_lon += sum(lons)
                 total_points += len(lats)
                 plot_points_on_map(lats, lons, map_obj)
+
+                # Add PolyLine to represent the path
+                path_color = 'red'
+                folium.PolyLine(locations=list(zip(lats, lons)), color=path_color, weight=2.5, opacity=1, fill=False).add_to(map_obj)
 
     return total_lat, total_lon, total_points
 
