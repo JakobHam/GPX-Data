@@ -47,8 +47,8 @@ def plot_gpx_file(gpx_file_path, map_obj, total_lat, total_lon, total_points):
 
 def plot_points_on_map(lats, lons, map_obj):
     for lat, lon in zip(lats, lons):
-        # Use red color with a thin line and no fill
-        folium.CircleMarker(location=[lat, lon], radius=3, color='red', fill_opacity=0).add_to(map_obj)
+        # Use a smaller radius for thinner markers
+        folium.CircleMarker(location=[lat, lon], radius=1, color='red', fill_opacity=0).add_to(map_obj)
 
 if __name__ == "__main__":
     folder_path = "/Users/jakobsmac/Public/python_script/source"
